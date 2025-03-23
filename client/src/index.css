@@ -31,11 +31,11 @@
   }
   
   .idea-indicator {
-    @apply absolute left-0 right-0 bottom-0 h-[2px] bg-secondary-500/50;
+    @apply absolute left-0 right-0 bottom-0 h-[2px] bg-blue-500/50;
   }
   
   .typewriter-effect {
-    @apply overflow-hidden border-r-2 border-primary-600 whitespace-normal;
+    @apply overflow-hidden border-r-2 border-foreground whitespace-normal;
     animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
   }
   
@@ -46,6 +46,6 @@
   
   @keyframes blink-caret {
     from, to { border-color: transparent }
-    50% { border-color: theme('colors.primary.600') }
+    50% { border-color: theme('colors.foreground') }
   }
 }

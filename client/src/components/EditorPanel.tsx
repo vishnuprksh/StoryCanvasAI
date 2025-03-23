@@ -6,6 +6,7 @@ import Editor from "./Editor";
 import PromptInput from "./PromptInput";
 import { animateText } from "@/lib/animations";
 import { useToast } from "@/hooks/use-toast";
+import { useIdeas } from "@/hooks/useIdeas";
 
 interface EditorPanelProps {
   story: Story;
@@ -21,6 +22,7 @@ export default function EditorPanel({ story, onContentChange, onSave }: EditorPa
   const generatingContentRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { ideas } = useIdeas(story.id);
 
   useEffect(() => {
     if (story) {
@@ -177,6 +179,7 @@ export default function EditorPanel({ story, onContentChange, onSave }: EditorPa
             content={content} 
             onChange={handleContentChange}
             onBlur={handleSaveStory}
+            ideas={ideas}
           />
           
           {isGenerating && (

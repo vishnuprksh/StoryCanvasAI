@@ -42,7 +42,7 @@ export const getEditorExtensions = () => [
 // Custom React component for idea nodes
 export const IdeaNodeView = ({ node, updateAttributes }: any) => {
   return (
-    <span className="idea-tag text-gray-800 bg-secondary-50 px-1 rounded">
+    <span className="idea-tag text-gray-800 bg-gray-100 px-1 rounded">
       {node.content}
       <span className="idea-indicator"></span>
     </span>
@@ -57,7 +57,7 @@ export const markIdeasInContent = (content: string, ideas: string[]): string => 
     const regex = new RegExp(`\\b${idea}\\b`, 'g');
     markedContent = markedContent.replace(
       regex, 
-      `<span class="idea-tag text-gray-800 bg-secondary-50 px-1 rounded">${idea}<span class="idea-indicator"></span></span>`
+      `<span class="idea-tag text-gray-800 bg-gray-100 px-1 rounded">${idea}<span class="idea-indicator"></span></span>`
     );
   });
   

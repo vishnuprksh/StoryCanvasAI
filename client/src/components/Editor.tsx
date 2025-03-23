@@ -1,14 +1,16 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import { getEditorExtensions } from "@/lib/tiptap";
 import { useCallback, useEffect } from "react";
+import { Idea } from "@shared/schema";
 
 interface EditorProps {
   content: string;
   onChange: (content: string) => void;
   onBlur?: () => void;
+  ideas?: Idea[];
 }
 
-export default function Editor({ content, onChange, onBlur }: EditorProps) {
+export default function Editor({ content, onChange, onBlur, ideas = [] }: EditorProps) {
   const editor = useEditor({
     extensions: getEditorExtensions(),
     content,
@@ -31,55 +33,37 @@ export default function Editor({ content, onChange, onBlur }: EditorProps) {
   const processContentWithIdeas = useCallback((editor: any) => {
     if (!editor) return;
 
-    // This is a simple implementation. For a real app, you would
-    // need a more sophisticated approach to identify and mark ideas
-    const ideaTerms = ["Avaloria", "Lyra", "Crystal of Eldoria"];
+    // Instead of trying to manually manipulate the editor state, which is more complex,
+    // we'll use Tiptap's commands API to set content with our marked ideas
     
-    editor.view.state.doc.descendants((node: any, pos: number) => {
-      if (node.isText) {
-        const text = node.text;
-        
-        ideaTerms.forEach(term => {
-          const regex = new RegExp(`\\b${term}\\b`, 'g');
-          let match;
-          
-          while ((match = regex.exec(text)) !== null) {
-            const from = pos + match.index;
-            const to = from + term.length;
-            
-            editor.view.dispatch(
-              editor.view.state.tr
-                .addMark(
-                  from, 
-                  to, 
-                  editor.schema.marks.span.create({
-                    class: 'idea-tag text-gray-800 bg-secondary-50 px-1 rounded'
-                  })
-                )
-            );
-            
-            // Add the indicator
-            editor.view.dispatch(
-              editor.view.state.tr
-                .addMark(
-                  from, 
-                  to, 
-                  editor.schema.marks.span.create({
-                    class: 'idea-indicator'
-                  })
-                )
-            );
-          }
-        });
-      }
+    // Get the current content
+    const content = editor.getHTML();
+    
+    // Get active ideas from the passed ideas prop
+    const activeIdeas = ideas.filter(idea => idea.isActive).map(idea => idea.name);
+    if (activeIdeas.length === 0) return;
+    
+    let markedContent = content;
+    
+    activeIdeas.forEach(idea => {
+      const regex = new RegExp(`\\b${idea}\\b`, 'g');
+      markedContent = markedContent.replace(
+        regex, 
+        `<span class="idea-tag text-gray-800 bg-gray-100 px-1 rounded">${idea}<span class="idea-indicator"></span></span>`
+      );
     });
-  }, []);
+    
+    // Only update if content changed
+    if (markedContent !== content) {
+      editor.commands.setContent(markedContent, false);
+    }
+  }, [ideas]);
 
   useEffect(() => {
     if (editor) {
       processContentWithIdeas(editor);
     }
-  }, [editor, processContentWithIdeas]);
+  }, [editor, processContentWithIdeas, ideas]);
 
   return (
     <EditorContent 
