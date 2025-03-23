@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply font-sans antialiased bg-gray-50 text-foreground;
+  }
+  
+  .prose {
+    @apply font-serif;
+  }
+  
+  .prose p {
+    @apply mb-4 text-gray-800 leading-relaxed;
+  }
+  
+  .prose h2 {
+    @apply text-xl font-bold text-gray-800 mb-4;
+  }
+  
+  .idea-tag {
+    @apply relative inline-block;
+  }
+  
+  .idea-indicator {
+    @apply absolute left-0 right-0 bottom-0 h-[2px] bg-secondary-500/50;
+  }
+  
+  .typewriter-effect {
+    @apply overflow-hidden border-r-2 border-primary-600 whitespace-normal;
+    animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+  }
+  
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: theme('colors.primary.600') }
+  }
+}
